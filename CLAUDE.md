@@ -63,6 +63,204 @@
 
 ---
 
+## React 備註規範（學習模式）
+
+程式碼請加入中文備註，幫助理解 React 的概念：
+
+* **每個 Component 檔案頂部**：說明這個元件的職責是什麼
+* **`useState`**：說明這個 state 存什麼資料、為什麼需要它
+* **`useEffect`**：說明副作用的觸發時機與目的
+* **`useCallback` / `useMemo`**：說明為什麼需要快取，避免什麼問題
+* **Props**：複雜的 props 說明從哪裡傳入、代表什麼意思
+* **條件渲染**：說明判斷條件背後的商業邏輯
+
+請額外提供：
+
+【為什麼用這個 Hook / 這樣設計】
+
+【資料流（資料從哪來、怎麼傳遞）】
+
+【常見錯誤或注意事項】
+
+---
+
+## Next.js (TypeScript)
+
+規則：
+
+* 優先使用 App Router（非 Pages Router）
+* 預設為 Server Component，需要互動才加 `'use client'`
+* 資料獲取優先在 Server Component 完成，不要在 Client Component 直接打後端 API
+* 路由使用 `app/` 目錄結構，共用 Layout 邏輯放 `layout.tsx`
+* 環境變數：前端可用的加 `NEXT_PUBLIC_` 前綴，其餘只保留在 Server 端
+* API Route 放在 `app/api/` 下，一律使用 Route Handler（`route.ts`）
+
+備註：
+
+使用 Next.js 時請明確區分 Server / Client Component，
+若發現不必要的 `'use client'` 或效能問題，請主動提示。
+
+---
+
+## Next.js 備註規範（學習模式）
+
+Next.js 和傳統 React 有重要差異，程式碼請加入中文備註說明：
+
+* **每個 Component 頂部**：標明 Server Component 或 Client Component，說明為什麼
+* **`'use client'`**：說明為什麼這個元件需要在 client 端執行
+* **Server Component 的 `async/await`**：說明在 server 端直接取得資料的好處（SEO、效能、不用 loading 狀態）
+* **Next.js `<Image>`**：說明和原生 `<img>` 的差異（自動最佳化、WebP 轉換、lazy loading）
+* **Next.js `<Link>`**：說明和原生 `<a>` 的差異（SPA 導頁不刷新、自動 prefetch）
+* **動態路由 `[id]`**：說明參數從哪裡來、如何在元件取得
+* **`layout.tsx`**：說明共用 Layout 的概念與用途
+* **`loading.tsx` / `error.tsx`**：說明 Next.js 的自動 Streaming UI
+
+請額外提供：
+
+【Next.js 和傳統 React 的差異】（每次遇到時說明）
+
+【為什麼這裡用 Server Component / Client Component】
+
+【常見錯誤：誤加 `'use client'`、在 Server Component 用 hooks 等】
+
+---
+
+## React 核心概念說明（學習重點）
+
+遇到以下概念時，請加入說明讓開發者理解原理：
+
+### Re-render 觸發時機
+
+React 元件在以下情況重新渲染：
+1. **自己的 state 改變**
+2. **父元件重新渲染**（即使 props 沒變，子元件也跟著渲染）
+3. **傳入的 props 改變**
+
+注意：Next.js **Server Component 不會 re-render**，只有 Client Component 才有 re-render 概念。
+
+遇到效能問題時，說明是哪種 re-render 觸發，以及如何用 `useMemo` / `useCallback` / `React.memo` 解決。
+
+### useEffect dependency array（最常見 bug 來源）
+
+```js
+useEffect(() => { ... })          // 每次渲染都跑 ← 通常是 bug
+useEffect(() => { ... }, [])      // 只在第一次掛載跑
+useEffect(() => { ... }, [value]) // value 改變時才跑
+```
+
+遇到 `useEffect` 時，請說明觸發時機與目的。
+**不要用 useEffect 抓資料：React 專案用 `useQuery`，Next.js 用 Server Component `async/await`。**
+
+### Key prop（list 渲染必知）
+
+```jsx
+// 錯誤：用 index 當 key，增刪時 React 無法正確追蹤，會有奇怪 bug
+{items.map((item, index) => <Card key={index} />)}
+
+// 正確：用資料的唯一 id
+{items.map((item) => <Card key={item.id} />)}
+```
+
+每次產生 list 渲染時，說明為什麼 key 要用 id 而不是 index。
+
+---
+
+## 表單處理
+
+### React 專案（無 Next.js）— Controlled Component
+
+```jsx
+const [email, setEmail] = useState('')
+
+<input
+  value={email}                               // state 控制顯示的值
+  onChange={(e) => setEmail(e.target.value)}  // 輸入時更新 state
+/>
+```
+
+若表單較複雜，建議使用 `react-hook-form`（效能更好、驗證更方便）。
+
+### Next.js 專案 — 優先考慮 Server Actions
+
+```tsx
+async function handleSubmit(formData: FormData) {
+  'use server'
+  // 在 server 直接處理，不需要額外 API 路由
+  const email = formData.get('email')
+}
+```
+
+遇到表單時，請說明使用 Controlled Component 還是 Server Actions，以及原因。
+
+---
+
+## 全域狀態管理
+
+### useState / useEffect / useQuery / Zustand 的關聯與選擇
+
+這四個工具各管不同類型的狀態，不是競爭關係：
+
+| 工具 | 管什麼 | 使用時機 |
+|------|--------|----------|
+| `useState` | 元件內部的本地狀態 | 只有這個元件自己需要的資料（輸入框值、toggle 開關） |
+| `useEffect` | 元件掛載/更新後的副作用 | 監聽事件、計時器、DOM 操作（**不要用來抓 API**） |
+| `useQuery` | 來自伺服器的資料 | 所有 API 請求，自動處理 loading / error / cache |
+| `Zustand` | 多元件共享的全域狀態 | 登入使用者、跨頁需要保留的資料 |
+
+**判斷流程：**
+```
+這個資料從 API 來的？
+  → YES → useQuery
+  → NO  → 只有這個元件需要？
+             → YES → useState
+             → NO（多個元件/頁面都要用）→ Zustand
+
+useEffect 什麼時候還會用？
+  → 監聽事件（resize、scroll）
+  → 計時器（setTimeout / setInterval）
+  → DOM 操作（手動 focus）
+  → 不是抓資料的副作用
+```
+
+### Zustand 備註規範
+
+Zustand store 程式碼請加入中文備註：
+
+* **store 頂部**：說明這個 store 負責管理哪些全域狀態
+* **每個 state 欄位**：說明存什麼資料、初始值為何
+* **每個 action（函式）**：說明觸發時機、做什麼事、會影響哪些 state
+* **從元件使用 store 時**：說明「為什麼這個資料要放全域而不是 useState」
+
+### React 專案（無 Next.js）
+
+使用 **Zustand**，語法簡潔，適合小到中型專案。
+
+### Next.js 專案
+
+優先靠 Server Component 直接取得資料，**減少對全域 state 的依賴**。
+需要 client 端全域狀態（登入資訊、UI 狀態）時，再使用 **Zustand**。
+
+### Zustand vs Redux
+
+| | Zustand | Redux |
+|---|---|---|
+| 程式碼量 | 少，直接定義 state + action | 多，需要 action / reducer / store |
+| 學習曲線 | 低 | 高 |
+| 適合規模 | 小～中型 | 大型、多人團隊 |
+| 樣板程式碼 | 幾乎沒有 | 很多（boilerplate） |
+
+### 何時考慮 Redux？
+
+* 超大型應用，多個團隊同時開發
+* 公司已有 Redux 技術棧
+* 需要 time-travel debugging 嚴格追蹤狀態變化
+
+### 學習建議
+
+先學 Zustand → 再改寫成 Redux 對比，理解兩者差異效果最好。
+
+---
+
 ## Vue
 
 規則：
@@ -126,19 +324,39 @@
 }
 ```
 
+成功 + 分頁：
+
+```json
+{
+  "success": true,
+  "data": [],
+  "meta": {
+    "page": 1,
+    "pageSize": 20,
+    "total": 100,
+    "totalPages": 5
+  }
+}
+```
+
 失敗格式：
 
 ```json
 {
   "success": false,
-  "message": ""
+  "code": "VALIDATION_ERROR",
+  "message": "人類可讀的錯誤說明",
+  "errors": [
+    { "field": "email", "message": "格式不正確" }
+  ]
 }
 ```
 
 備註：
 
-如果專案已有既有格式，
-請優先沿用。
+* `code` 為機器可讀的錯誤代碼（英文大寫），前端用來判斷邏輯
+* `errors` 僅在表單驗證失敗時提供
+* 如果專案已有既有格式，請優先沿用
 
 ---
 
@@ -147,11 +365,15 @@
 開發時必須遵守，不需等到 Code Review 才檢查。
 
 * 密碼、API Key、Secret 一律寫在環境變數，禁止寫在程式碼裡
-* 所有使用者輸入必須驗證，使用 Zod 處理
+* 所有使用者輸入必須驗證，使用 Zod 處理（驗證 + 型別推導）
 * 資料庫操作禁止字串拼接 SQL，一律使用 ORM 或參數化查詢
-* API 端點必須驗證身份（JWT），公開端點需明確標註
+* API 端點必須驗證身份（JWT），公開端點需明確標註 `// public`
 * 回應資料禁止包含密碼、token 等敏感欄位
 * 前端禁止儲存敏感資料於 localStorage，改用 httpOnly Cookie
+* Express 專案必須加 `helmet`（設定安全 HTTP header）
+* Express 專案必須加 `cors`，明確設定允許的 origin，禁止 `*`
+* API 需加 Rate Limiting（`express-rate-limit`），防止暴力破解
+* JWT 必須設定過期時間（`expiresIn`），不可使用永不過期的 token
 
 ---
 
@@ -168,7 +390,12 @@
 | 密碼雜湊 | bcrypt |
 | 日期處理 | day.js |
 | 前端 HTTP 請求 | axios |
+| 全域狀態 | Zustand（小～中型）/ Redux Toolkit（大型多團隊） |
+| 伺服器狀態快取 | @tanstack/react-query（React）/ SWR（Next.js 可選） |
 | 測試 | Vitest |
+| Express 安全 Header | helmet |
+| CORS 設定 | cors |
+| Rate Limiting | express-rate-limit |
 
 ---
 
@@ -191,6 +418,8 @@ fix: 修復購物車數量計算錯誤
 chore: 更新 Prisma 至 5.x
 refactor: 拆分 AuthService 邏輯
 ```
+
+commit message 只寫功能說明，不加 `Co-Authored-By` 或任何 Claude 相關資訊。
 
 ---
 
