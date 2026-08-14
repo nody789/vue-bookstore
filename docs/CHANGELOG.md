@@ -14,7 +14,7 @@
 ## [Unreleased]
 
 ### 新增
-- 初始化專案
+- 初始化專案（Vue Bookstore 線上書店）
 
 ---
 
