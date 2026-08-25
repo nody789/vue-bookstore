@@ -46,7 +46,7 @@ const router = createRouter({
       component: () => import('@/layouts/AdminLayout.vue'),
       meta: { requiresAuth: true, requiresAdmin: true },
       children: [
-        { path: '', redirect: '/admin/books' },
+        { path: '', name: 'admin-dashboard', component: () => import('@/pages/admin/AdminDashboardPage.vue') },
         { path: 'books', name: 'admin-books', component: () => import('@/pages/admin/AdminBooksPage.vue') },
         { path: 'books/new', name: 'admin-book-new', component: () => import('@/pages/admin/AdminBookFormPage.vue') },
         { path: 'books/:id/edit', name: 'admin-book-edit', component: () => import('@/pages/admin/AdminBookFormPage.vue') },

@@ -24,10 +24,12 @@ import cartRoutes from './cart.js'
 import ordersRoutes from './orders.js'
 import couponRoutes from './coupon.js'
 import uploadRoutes from './upload.js'
+import statsRoutes from './stats.js'
 
 const router = Router()
 
 router.use('/auth', authRoutes)
+router.use('/stats', statsRoutes)
 router.use('/users', usersRoutes)
 router.use('/books', booksRoutes)
 router.use('/categories', categoriesRoutes)
