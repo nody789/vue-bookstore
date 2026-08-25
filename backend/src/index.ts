@@ -16,6 +16,7 @@ import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
+import path from 'path'
 import router from './routes/index'
 import { errorHandler } from './middlewares/errorHandler'
 
@@ -55,6 +56,17 @@ app.use(rateLimit({
 
 // 所有 API 都掛在 /api/v1 前綴下，方便未來推出 v2 時不影響現有客戶端
 app.use('/api/v1', router)
+
+// 正式環境：Express 直接服務 Vue 打包後的靜態檔案
+// 這樣前後端只需要一個 Render 服務，省去跨域問題
+if (process.env['NODE_ENV'] === 'production') {
+  const frontendDist = path.join(__dirname, '../../frontend/dist')
+  app.use(express.static(frontendDist))
+  // SPA fallback：所有非 API 路徑都回傳 index.html，讓 Vue Router 接手
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(frontendDist, 'index.html'))
+  })
+}
 
 // 統一錯誤處理，必須放在所有路由的最後面
 // Express 透過「四個參數」辨認這是 error handler middleware

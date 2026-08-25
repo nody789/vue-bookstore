@@ -3,10 +3,10 @@
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
 
-// 開發環境：VITE_API_BASE_URL 為空，走 Vite proxy（/api/v1 → localhost:8000）
-// 正式環境（Render）：VITE_API_BASE_URL 填入後端完整 URL
+// 開發：Vite proxy 把 /api/v1 轉發到 localhost:8000（vite.config.ts 設定）
+// 正式環境：前後端同一個 Render 服務，直接用相對路徑 /api/v1 即可
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api/v1',
+  baseURL: '/api/v1',
   headers: { 'Content-Type': 'application/json' },
 })
 
