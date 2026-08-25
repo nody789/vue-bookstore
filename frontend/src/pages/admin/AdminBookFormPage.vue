@@ -4,7 +4,10 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import api from '@/lib/api'
+import { useToast } from '@/composables/useToast'
 import type { Category } from '@/types'
+
+const toast = useToast()
 
 const route = useRoute()
 const router = useRouter()
@@ -102,8 +105,10 @@ const submit = async () => {
     }
     if (isEdit.value) {
       await api.patch(`/books/${route.params['id']}`, payload)
+      toast.success('書籍已更新')
     } else {
       await api.post('/books', payload)
+      toast.success('書籍已新增')
     }
     router.push('/admin/books')
   } catch (err: unknown) {

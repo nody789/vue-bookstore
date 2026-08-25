@@ -5,10 +5,12 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '@/lib/api'
 import { useCartStore } from '@/stores/cart'
+import { useToast } from '@/composables/useToast'
 import type { CouponValidateResult } from '@/types'
 
 const router = useRouter()
 const cart = useCartStore()
+const toast = useToast()
 
 // submitting：送出中按鈕 disabled，防止重複送出造成重複訂單
 const submitting = ref(false)
@@ -71,7 +73,8 @@ const submit = async () => {
       ...form.value,
       couponCode: couponResult.value?.coupon.code ?? undefined,
     })
-    await cart.fetchCart()  // 訂單成立後後端已清空購物車，同步最新狀態
+    await cart.fetchCart()
+    toast.success('訂單已成立！感謝您的購買')
     router.push('/orders')
   } catch (err: unknown) {
     const apiErrors = (err as { response?: { data?: { errors?: Array<{ field: string; message: string }> } } })?.response?.data?.errors
@@ -79,6 +82,8 @@ const submit = async () => {
       apiErrors.forEach(({ field, message }: { field: string; message: string }) => {
         errors.value[field] = message
       })
+    } else {
+      toast.error('下單失敗，請稍後再試')
     }
   } finally {
     submitting.value = false

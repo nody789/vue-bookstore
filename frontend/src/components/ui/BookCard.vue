@@ -82,7 +82,7 @@ const showCoverImage = computed(() => !!props.book.coverImageUrl && !imgError.va
       <div class="flex items-center justify-between mt-auto pt-2">
         <span class="font-bold text-amber-700 text-sm">NT$ {{ book.price.toLocaleString() }}</span>
         <span v-if="book.stock === 0" class="text-xs text-red-400 bg-red-50 px-2 py-0.5 rounded-full">已售完</span>
-        <span v-else class="text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">有庫存</span>
+        <span v-else-if="book.stock <= 10" class="text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">僅剩 {{ book.stock }} 本</span>
       </div>
     </div>
   </RouterLink>

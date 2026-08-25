@@ -3,9 +3,12 @@
 // 打 /orders/admin（ADMIN 專用端點），前台 /orders 只回傳自己的訂單
 import { ref, onMounted } from 'vue'
 import api from '@/lib/api'
+import { useToast } from '@/composables/useToast'
 import StatusBadge from '@/components/ui/StatusBadge.vue'
 import Pagination from '@/components/ui/Pagination.vue'
 import type { Order, OrderStatus, PaginationMeta } from '@/types'
+
+const toast = useToast()
 
 const orders = ref<Order[]>([])
 const meta = ref<PaginationMeta | null>(null)
@@ -31,8 +34,13 @@ const fetchOrders = async () => {
   }
 }
 
+const statusLabels: Record<OrderStatus, string> = {
+  PENDING: '待付款', PAID: '已付款', SHIPPED: '配送中', COMPLETED: '已完成', CANCELLED: '已取消',
+}
+
 const updateStatus = async (orderId: string, status: OrderStatus) => {
   await api.patch(`/orders/admin/${orderId}/status`, { status })
+  toast.success(`訂單狀態已更新為「${statusLabels[status]}」`)
   await fetchOrders()
 }
 
