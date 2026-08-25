@@ -114,17 +114,23 @@ onMounted(() => {
           </div>
         </div>
 
-        <!-- 統計數字 -->
+        <!-- 統計數字（從已有的 meta / categories 取值，不額外打 API） -->
         <div class="flex md:flex-col gap-6 md:gap-4 shrink-0">
-          <div class="text-center bg-white/10 backdrop-blur rounded-2xl px-6 py-4 border border-white/20">
-            <p class="text-3xl font-bold text-white">20</p>
+          <div class="text-center bg-white/10 backdrop-blur rounded-2xl px-6 py-4 border border-white/20 min-w-[88px]">
+            <p class="text-3xl font-bold text-white">
+              <span v-if="meta">{{ meta.total }}</span>
+              <span v-else class="inline-block w-8 h-7 bg-white/20 rounded animate-pulse"></span>
+            </p>
             <p class="text-amber-200 text-xs mt-1">精選書籍</p>
           </div>
-          <div class="text-center bg-white/10 backdrop-blur rounded-2xl px-6 py-4 border border-white/20">
-            <p class="text-3xl font-bold text-white">5</p>
+          <div class="text-center bg-white/10 backdrop-blur rounded-2xl px-6 py-4 border border-white/20 min-w-[88px]">
+            <p class="text-3xl font-bold text-white">
+              <span v-if="categories.length">{{ categories.length }}</span>
+              <span v-else class="inline-block w-8 h-7 bg-white/20 rounded animate-pulse"></span>
+            </p>
             <p class="text-amber-200 text-xs mt-1">書籍分類</p>
           </div>
-          <div class="text-center bg-white/10 backdrop-blur rounded-2xl px-6 py-4 border border-white/20">
+          <div class="text-center bg-white/10 backdrop-blur rounded-2xl px-6 py-4 border border-white/20 min-w-[88px]">
             <p class="text-3xl font-bold text-white">免運</p>
             <p class="text-amber-200 text-xs mt-1">滿 599 元</p>
           </div>
