@@ -1,0 +1,54 @@
+# Render 部署設定
+# 文件：https://render.com/docs/blueprint-spec
+#
+# 這個檔案定義兩個服務：
+# 1. vue-bookstore-api  — 後端 Express API（Web Service）
+# 2. vue-bookstore-web  — 前端 Vue3（Static Site）
+#
+# 首次部署步驟：
+# 1. 在 Render Dashboard 建立 New Blueprint，選這個 repo
+# 2. 在後端服務的 Environment 填入所有 sync: false 的環境變數
+# 3. 部署成功後，把後端 URL 填入前端的 VITE_API_BASE_URL
+
+services:
+  # ── 後端 API（Node.js / Express）────────────────────────────────────
+  - type: web
+    name: vue-bookstore-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install && npm run build && npx prisma generate && npx prisma migrate deploy
+    startCommand: node dist/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 8000
+      # 以下須在 Render Dashboard 手動填入（sync: false = 不從 repo 讀取）
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+
+  # ── 前端（Vue3 / Vite 靜態網站）─────────────────────────────────────
+  - type: static
+    name: vue-bookstore-web
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      # 填入後端部署後的 URL，例如 https://vue-bookstore-api.onrender.com/api/v1
+      - key: VITE_API_BASE_URL
+        sync: false
+    routes:
+      # SPA fallback：所有不存在的路徑都回傳 index.html（讓 Vue Router 接手）
+      - type: rewrite
+        source: /*
+        destination: /index.html

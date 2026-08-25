@@ -23,6 +23,7 @@ import categoriesRoutes from './categories'
 import cartRoutes from './cart'
 import ordersRoutes from './orders'
 import couponRoutes from './coupon'
+import uploadRoutes from './upload'
 
 const router = Router()
 
@@ -33,5 +34,6 @@ router.use('/categories', categoriesRoutes)
 router.use('/cart', cartRoutes)
 router.use('/orders', ordersRoutes)
 router.use('/coupons', couponRoutes)
+router.use('/upload', uploadRoutes)
 
 export default router

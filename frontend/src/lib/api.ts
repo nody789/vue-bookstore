@@ -3,9 +3,10 @@
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
 
-// baseURL '/api/v1'：所有請求自動加前綴，Vite proxy 轉發到後端（避免 CORS）
+// 開發環境：VITE_API_BASE_URL 為空，走 Vite proxy（/api/v1 → localhost:8000）
+// 正式環境（Render）：VITE_API_BASE_URL 填入後端完整 URL
 const api = axios.create({
-  baseURL: '/api/v1',
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api/v1',
   headers: { 'Content-Type': 'application/json' },
 })
 
