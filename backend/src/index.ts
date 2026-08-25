@@ -29,7 +29,15 @@ const app = express()
 const PORT = process.env['PORT'] || 8000
 
 // helmet 自動設定安全用的 HTTP Response Header（防 XSS、clickjacking 等攻擊）
-app.use(helmet())
+// img-src 額外開放 https: 讓 Cloudinary 等外部圖片可以正常載入
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      'img-src': ["'self'", 'data:', 'https:'],
+    },
+  },
+}))
 
 // Render（以及多數雲端平台）會透過反向代理轉發請求，若不設這行，
 // req.ip 永遠是 proxy IP，導致 rate limit 把所有用戶當同一人計算
