@@ -52,16 +52,5 @@ docs/
 ├── API.md        ← API 端點列表與格式說明
 ├── DATABASE.md   ← 資料表結構與關聯
 ├── UI_RULES.md   ← UI 規則、色彩、元件規範
-├── CHANGELOG.md  ← 版本異動紀錄
-└── INTERVIEW.md  ← 面試準備（技術選擇說明、常見問題答法）
+└── CHANGELOG.md  ← 版本異動紀錄
 ```
-
----
-
-## 開發前請先閱讀
-
-```
-CLAUDE.md 和 docs/ 底下所有文件
-```
-
-閱讀完摘要確認後再開始開發。
