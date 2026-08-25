@@ -2,10 +2,13 @@
 // HomePage — 前台首頁，提供分類篩選、關鍵字搜尋、書籍網格、分頁
 // 【資料流】onMounted 同時載入分類和書籍，篩選條件變動時 watch 重新打 API
 import { ref, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import api from '@/lib/api'
 import BookCard from '@/components/ui/BookCard.vue'
 import Pagination from '@/components/ui/Pagination.vue'
 import type { Book, Category, PaginationMeta } from '@/types'
+
+const route = useRoute()
 
 const books = ref<Book[]>([])
 const categories = ref<Category[]>([])
@@ -15,10 +18,11 @@ const loading = ref(false)
 
 // filters：統一管理查詢參數，watch 只需監聽一個 ref（用 deep: true）
 // 切換分類或搜尋時把 page 重設為 1，避免停留在不存在的頁碼
+// 初始值讀取 URL query，支援 Navbar 搜尋跳轉（?keyword=xxx）
 const filters = ref({
   page: 1,
   categoryId: '',
-  keyword: '',
+  keyword: (route.query['keyword'] as string) ?? '',
 })
 
 const fetchBooks = async () => {
@@ -45,6 +49,12 @@ const fetchCategories = async () => {
 
 // filters 任一欄位改變就重新打 API；不加 immediate 避免與 onMounted 重複執行
 watch(filters, () => fetchBooks(), { deep: true })
+
+// Navbar 搜尋跳轉時 route.query 改變 → 同步更新 filters
+watch(() => route.query['keyword'], (kw) => {
+  filters.value.keyword = (kw as string) ?? ''
+  filters.value.page = 1
+})
 
 // keywordTimer：搜尋 debounce，停止輸入 400ms 後才觸發，避免每打一字就打 API
 let keywordTimer: ReturnType<typeof setTimeout>
@@ -162,6 +172,7 @@ onMounted(() => {
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
           </svg>
           <input type="text" placeholder="搜尋書名、作者..." @input="onKeywordInput"
+            :value="filters.keyword"
             class="border border-gray-300 rounded-full pl-9 pr-4 py-1.5 text-sm w-52 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white" />
         </div>
       </div>

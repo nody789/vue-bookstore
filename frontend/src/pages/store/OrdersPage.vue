@@ -33,8 +33,9 @@ onMounted(fetchOrders)
     <div v-else-if="orders.length === 0" class="text-center py-20 text-stone-400">還沒有訂單</div>
     <div v-else class="space-y-4">
       <div v-for="order in orders" :key="order.id"
-        class="bg-white border border-gray-200 rounded-lg p-4">
-        <div class="flex items-center justify-between mb-3">
+        class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+        <!-- 訂單標頭 -->
+        <div class="flex items-center justify-between px-5 py-4 bg-gray-50 border-b border-gray-200">
           <div>
             <p class="text-xs text-stone-400">{{ new Date(order.createdAt).toLocaleDateString('zh-TW') }}</p>
             <p class="text-xs text-stone-400 font-mono mt-0.5">{{ order.id }}</p>
@@ -42,15 +43,25 @@ onMounted(fetchOrders)
           <StatusBadge :status="order.status" />
         </div>
 
-        <div class="space-y-1 text-sm text-stone-600">
-          <p v-for="item in order.items" :key="item.id">
-            {{ item.bookTitle }} × {{ item.quantity }}
-            <span class="text-stone-400 ml-2">NT$ {{ (item.unitPrice * item.quantity).toLocaleString() }}</span>
-          </p>
+        <!-- 商品明細 -->
+        <div class="px-5 py-4 space-y-1.5 text-sm text-stone-600">
+          <div v-for="item in order.items" :key="item.id" class="flex justify-between">
+            <span>{{ item.bookTitle }} × {{ item.quantity }}</span>
+            <span class="text-stone-400">NT$ {{ (item.unitPrice * item.quantity).toLocaleString() }}</span>
+          </div>
         </div>
 
-        <div class="border-t border-gray-100 mt-3 pt-3 text-right">
-          <span class="font-bold text-amber-700">合計 NT$ {{ order.totalAmount.toLocaleString() }}</span>
+        <!-- 收件資訊 + 合計 -->
+        <div class="border-t border-gray-100 px-5 py-4 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+          <div class="text-xs text-stone-400 space-y-0.5">
+            <p><span class="text-stone-500 font-medium">收件人：</span>{{ order.recipientName }}・{{ order.recipientPhone }}</p>
+            <p><span class="text-stone-500 font-medium">地址：</span>{{ order.shippingAddress }}</p>
+            <p v-if="order.couponCode">
+              <span class="text-stone-500 font-medium">折價券：</span>
+              {{ order.couponCode }}（折抵 NT$ {{ order.discountAmount.toLocaleString() }}）
+            </p>
+          </div>
+          <p class="font-bold text-amber-700 shrink-0">合計 NT$ {{ order.totalAmount.toLocaleString() }}</p>
         </div>
       </div>
     </div>

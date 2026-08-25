@@ -8,6 +8,7 @@ import api from '@/lib/api'
 import { useAuthStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
 import { useToast } from '@/composables/useToast'
+import BookCard from '@/components/ui/BookCard.vue'
 import type { Book } from '@/types'
 
 const route = useRoute()
@@ -18,6 +19,7 @@ const toast = useToast()
 
 const book = ref<Book | null>(null)
 const loading = ref(true)
+const relatedBooks = ref<Book[]>([])
 // quantity：購買數量，模板用 Math.max/min 限制在 1 到庫存之間
 const quantity = ref(1)
 // adding：加入中時按鈕 disabled，避免重複點擊
@@ -28,6 +30,11 @@ onMounted(async () => {
   try {
     const res = await api.get(`/books/${route.params['id']}`)
     book.value = res.data.data
+    // 載入同分類的相關書籍（排除自己），最多顯示 4 本
+    const related = await api.get('/books', {
+      params: { categoryId: book.value!.category.id, pageSize: 5 },
+    })
+    relatedBooks.value = (related.data.data as Book[]).filter((b) => b.id !== book.value!.id).slice(0, 4)
   } catch {
     router.push('/')
   } finally {
@@ -103,6 +110,14 @@ const addToCart = async () => {
             {{ adding ? '加入中...' : '加入購物車' }}
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- 相關書籍 -->
+    <div v-if="relatedBooks.length > 0" class="mt-12">
+      <h2 class="font-semibold text-stone-700 text-lg mb-4">同分類的書籍</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <BookCard v-for="b in relatedBooks" :key="b.id" :book="b" />
       </div>
     </div>
   </div>

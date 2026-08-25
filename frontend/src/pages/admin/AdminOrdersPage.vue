@@ -14,7 +14,19 @@ const orders = ref<Order[]>([])
 const meta = ref<PaginationMeta | null>(null)
 const loading = ref(true)
 const page = ref(1)
+const statusFilter = ref<OrderStatus | ''>('')
 
+// 篩選 tab 選項：空字串代表全部
+const filterTabs: { value: OrderStatus | ''; label: string }[] = [
+  { value: '',          label: '全部' },
+  { value: 'PENDING',   label: '待付款' },
+  { value: 'PAID',      label: '已付款' },
+  { value: 'SHIPPED',   label: '配送中' },
+  { value: 'COMPLETED', label: '已完成' },
+  { value: 'CANCELLED', label: '已取消' },
+]
+
+// 下拉選單選項（排除空值）
 const statusOptions: { value: OrderStatus | ''; label: string }[] = [
   { value: 'PENDING',   label: '待付款' },
   { value: 'PAID',      label: '已付款' },
@@ -26,12 +38,20 @@ const statusOptions: { value: OrderStatus | ''; label: string }[] = [
 const fetchOrders = async () => {
   loading.value = true
   try {
-    const res = await api.get('/orders/admin', { params: { page: page.value } })
+    const params: Record<string, string | number> = { page: page.value }
+    if (statusFilter.value) params['status'] = statusFilter.value
+    const res = await api.get('/orders/admin', { params })
     orders.value = res.data.data
     meta.value = res.data.meta
   } finally {
     loading.value = false
   }
+}
+
+const onTabChange = (status: OrderStatus | '') => {
+  statusFilter.value = status
+  page.value = 1
+  fetchOrders()
 }
 
 const statusLabels: Record<OrderStatus, string> = {
@@ -49,7 +69,22 @@ onMounted(fetchOrders)
 
 <template>
   <div>
-    <h1 class="font-bold text-2xl text-stone-800 mb-6">訂單管理</h1>
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="font-bold text-2xl text-stone-800">訂單管理</h1>
+      <p v-if="meta" class="text-xs text-stone-400">共 {{ meta.total }} 筆</p>
+    </div>
+
+    <!-- 狀態篩選 tab -->
+    <div class="flex gap-2 mb-5 flex-wrap">
+      <button v-for="tab in filterTabs" :key="tab.value"
+        @click="onTabChange(tab.value)"
+        :class="['px-4 py-1.5 rounded-full text-sm font-medium border transition',
+          statusFilter === tab.value
+            ? 'bg-amber-700 text-white border-amber-700'
+            : 'border-gray-300 text-stone-500 hover:border-amber-500 hover:text-amber-700']">
+        {{ tab.label }}
+      </button>
+    </div>
 
     <div v-if="loading" class="text-center py-20 text-stone-400">載入中...</div>
     <div v-else>
@@ -90,7 +125,7 @@ onMounted(fetchOrders)
         </tbody>
       </table>
 
-      <Pagination v-if="meta" :meta="meta" @change="(p) => { page = p; fetchOrders() }" />
+      <Pagination v-if="meta" :meta="meta" @change="(p) => { page.value = p; fetchOrders() }" />
     </div>
   </div>
 </template>

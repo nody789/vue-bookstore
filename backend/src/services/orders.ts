@@ -12,6 +12,7 @@
  * 同時也負責訂單的查詢功能（使用者查自己的訂單、管理員查所有訂單）。
  */
 import { prisma } from '../lib/prisma.js'
+import { type OrderStatus } from '../generated/prisma/client.js'
 import { AppError } from '../types/index.js'
 import { getPaginationParams } from '../utils/response.js'
 import type { CreateOrderInput, UpdateOrderStatusInput } from '../validators/order.js'
@@ -173,7 +174,16 @@ export const getOrderById = async (userId: string, orderId: string) => {
  */
 export const getAllOrders = async (query: Record<string, unknown>) => {
   const { page, pageSize, skip, take } = getPaginationParams(query)
-  const where = { deletedAt: null }
+  const validStatuses: OrderStatus[] = ['PENDING', 'PAID', 'SHIPPED', 'COMPLETED', 'CANCELLED']
+  const rawStatus = query['status']
+  const status: OrderStatus | undefined =
+    typeof rawStatus === 'string' && (validStatuses as string[]).includes(rawStatus)
+      ? (rawStatus as OrderStatus)
+      : undefined
+  const where = {
+    deletedAt: null,
+    ...(status && { status }),
+  }
 
   const [orders, total] = await Promise.all([
     prisma.order.findMany({
