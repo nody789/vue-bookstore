@@ -17,8 +17,13 @@ import cors from 'cors'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
 import path from 'path'
+import { fileURLToPath } from 'url'
 import router from './routes/index.js'
 import { errorHandler } from './middlewares/errorHandler.js'
+
+// ES module 沒有 __dirname，用 import.meta.url 還原
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const app = express()
 const PORT = process.env['PORT'] || 8000
@@ -63,7 +68,8 @@ if (process.env['NODE_ENV'] === 'production') {
   const frontendDist = path.join(__dirname, '../../frontend/dist')
   app.use(express.static(frontendDist))
   // SPA fallback：所有非 API 路徑都回傳 index.html，讓 Vue Router 接手
-  app.get('*', (_req, res) => {
+  // Express 5 不支援 app.get('*')，改用 app.use() 作為 catch-all
+  app.use((_req, res) => {
     res.sendFile(path.join(frontendDist, 'index.html'))
   })
 }
