@@ -27,7 +27,7 @@
  * }
  */
 import type { Request, Response, NextFunction } from 'express'
-import { AppError } from '../types/index'
+import { AppError } from '../types/index.js'
 
 export const errorHandler = (
   err: Error,

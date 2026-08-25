@@ -18,9 +18,9 @@
  * 最終確認必須在建立訂單的 transaction 中進行。
  */
 import { Router } from 'express'
-import * as couponController from '../controllers/coupon'
-import { authenticate } from '../middlewares/auth'
-import { adminOnly } from '../middlewares/adminOnly'
+import * as couponController from '../controllers/coupon.js'
+import { authenticate } from '../middlewares/auth.js'
+import { adminOnly } from '../middlewares/adminOnly.js'
 
 const router = Router()
 

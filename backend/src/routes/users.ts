@@ -12,9 +12,9 @@
  * 使用者的 ID 從 JWT Token 解析後的 req.user.id 取得。
  */
 import { Router } from 'express'
-import * as usersController from '../controllers/users'
-import { authenticate } from '../middlewares/auth'
-import type { AuthRequest } from '../types/index'
+import * as usersController from '../controllers/users.js'
+import { authenticate } from '../middlewares/auth.js'
+import type { AuthRequest } from '../types/index.js'
 import type { Response, NextFunction } from 'express'
 
 const router = Router()

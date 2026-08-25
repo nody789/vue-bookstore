@@ -7,8 +7,8 @@
  * - 確保分類名稱不重複
  * - 刪除前確認分類下無書籍（資料完整性保護）
  */
-import { prisma } from '../lib/prisma'
-import { AppError } from '../types/index'
+import { prisma } from '../lib/prisma.js'
+import { AppError } from '../types/index.js'
 
 /**
  * 取得所有書籍分類，依名稱升序排列（A→Z）。

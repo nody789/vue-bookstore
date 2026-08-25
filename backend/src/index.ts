@@ -17,8 +17,8 @@ import cors from 'cors'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
 import path from 'path'
-import router from './routes/index'
-import { errorHandler } from './middlewares/errorHandler'
+import router from './routes/index.js'
+import { errorHandler } from './middlewares/errorHandler.js'
 
 const app = express()
 const PORT = process.env['PORT'] || 8000

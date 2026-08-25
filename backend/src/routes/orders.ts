@@ -18,10 +18,10 @@
  * 防止使用者 A 用訂單 ID 查看使用者 B 的訂單資料。
  */
 import { Router } from 'express'
-import * as ordersController from '../controllers/orders'
-import { authenticate } from '../middlewares/auth'
-import { adminOnly } from '../middlewares/adminOnly'
-import type { AuthRequest } from '../types/index'
+import * as ordersController from '../controllers/orders.js'
+import { authenticate } from '../middlewares/auth.js'
+import { adminOnly } from '../middlewares/adminOnly.js'
+import type { AuthRequest } from '../types/index.js'
 import type { Response, NextFunction } from 'express'
 
 const router = Router()

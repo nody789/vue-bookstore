@@ -13,10 +13,10 @@
  * 管理分類只有管理員能操作，且刪除前 service 會確認該分類下沒有書籍。
  */
 import { Router } from 'express'
-import * as categoriesController from '../controllers/categories'
-import { authenticate } from '../middlewares/auth'
-import { adminOnly } from '../middlewares/adminOnly'
-import type { AuthRequest } from '../types/index'
+import * as categoriesController from '../controllers/categories.js'
+import { authenticate } from '../middlewares/auth.js'
+import { adminOnly } from '../middlewares/adminOnly.js'
+import type { AuthRequest } from '../types/index.js'
 import type { Response, NextFunction } from 'express'
 
 const router = Router()

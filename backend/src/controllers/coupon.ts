@@ -7,10 +7,10 @@
  * controller 本身不包含折扣計算邏輯。
  */
 import type { Request, Response } from 'express'
-import * as couponService from '../services/coupon'
-import { createCouponSchema, validateCouponSchema, updateCouponSchema } from '../validators/coupon'
-import { sendSuccess } from '../utils/response'
-import { parseZod } from '../utils/validate'
+import * as couponService from '../services/coupon.js'
+import { createCouponSchema, validateCouponSchema, updateCouponSchema } from '../validators/coupon.js'
+import { sendSuccess } from '../utils/response.js'
+import { parseZod } from '../utils/validate.js'
 
 /**
  * 取得所有折價券列表（僅管理員）。

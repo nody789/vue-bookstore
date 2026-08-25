@@ -12,10 +12,10 @@
  * 4. uploadImage：把圖片送給 Cloudinary，回傳 URL
  */
 import { Router } from 'express'
-import { authenticate } from '../middlewares/auth'
-import { adminOnly } from '../middlewares/adminOnly'
-import { upload } from '../middlewares/upload'
-import { uploadImage } from '../controllers/upload'
+import { authenticate } from '../middlewares/auth.js'
+import { adminOnly } from '../middlewares/adminOnly.js'
+import { upload } from '../middlewares/upload.js'
+import { uploadImage } from '../controllers/upload.js'
 
 const router = Router()
 

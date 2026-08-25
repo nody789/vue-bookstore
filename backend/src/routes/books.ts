@@ -19,10 +19,10 @@
  * PATCH 代表部分更新（只傳要修改的欄位），更符合實際需求
  */
 import { Router } from 'express'
-import * as booksController from '../controllers/books'
-import { authenticate } from '../middlewares/auth'
-import { adminOnly } from '../middlewares/adminOnly'
-import type { AuthRequest } from '../types/index'
+import * as booksController from '../controllers/books.js'
+import { authenticate } from '../middlewares/auth.js'
+import { adminOnly } from '../middlewares/adminOnly.js'
+import type { AuthRequest } from '../types/index.js'
 import type { Response, NextFunction } from 'express'
 
 const router = Router()

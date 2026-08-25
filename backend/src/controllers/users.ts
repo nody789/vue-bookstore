@@ -8,9 +8,9 @@
  * 轉交 usersService 處理。
  */
 import type { Response } from 'express'
-import * as usersService from '../services/users'
-import { sendSuccess } from '../utils/response'
-import type { AuthRequest } from '../types/index'
+import * as usersService from '../services/users.js'
+import { sendSuccess } from '../utils/response.js'
+import type { AuthRequest } from '../types/index.js'
 
 /**
  * 取得當前登入使用者的個人資料。

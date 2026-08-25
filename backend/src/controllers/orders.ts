@@ -8,11 +8,11 @@
  * 所有複雜的訂單建立邏輯（庫存扣減、折價券驗證、購物車清空）都在 service 層。
  */
 import type { Response } from 'express'
-import * as ordersService from '../services/orders'
-import { createOrderSchema, updateOrderStatusSchema } from '../validators/order'
-import { type AuthRequest } from '../types/index'
-import { sendSuccess, sendPaginated } from '../utils/response'
-import { parseZod } from '../utils/validate'
+import * as ordersService from '../services/orders.js'
+import { createOrderSchema, updateOrderStatusSchema } from '../validators/order.js'
+import { type AuthRequest } from '../types/index.js'
+import { sendSuccess, sendPaginated } from '../utils/response.js'
+import { parseZod } from '../utils/validate.js'
 
 /**
  * 建立訂單（結帳）。

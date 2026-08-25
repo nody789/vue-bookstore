@@ -7,10 +7,10 @@
  * 最後把結果格式化後回傳給前端。Controller 本身不碰資料庫。
  */
 import type { Request, Response } from 'express'
-import * as booksService from '../services/books'
-import { createBookSchema, updateBookSchema } from '../validators/book'
-import { sendSuccess, sendPaginated } from '../utils/response'
-import { parseZod } from '../utils/validate'
+import * as booksService from '../services/books.js'
+import { createBookSchema, updateBookSchema } from '../validators/book.js'
+import { sendSuccess, sendPaginated } from '../utils/response.js'
+import { parseZod } from '../utils/validate.js'
 
 /**
  * 取得書籍列表（支援分頁、篩選、搜尋）。

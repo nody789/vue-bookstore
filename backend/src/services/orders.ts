@@ -11,10 +11,10 @@
  *
  * 同時也負責訂單的查詢功能（使用者查自己的訂單、管理員查所有訂單）。
  */
-import { prisma } from '../lib/prisma'
-import { AppError } from '../types/index'
-import { getPaginationParams } from '../utils/response'
-import type { CreateOrderInput, UpdateOrderStatusInput } from '../validators/order'
+import { prisma } from '../lib/prisma.js'
+import { AppError } from '../types/index.js'
+import { getPaginationParams } from '../utils/response.js'
+import type { CreateOrderInput, UpdateOrderStatusInput } from '../validators/order.js'
 
 /**
  * 建立訂單（結帳核心邏輯）。

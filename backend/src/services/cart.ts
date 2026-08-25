@@ -10,9 +10,9 @@
  *
  * 所有操作都綁定 userId，確保使用者只能操作自己的購物車。
  */
-import { prisma } from '../lib/prisma'
-import { AppError } from '../types/index'
-import type { AddToCartInput, UpdateCartItemInput } from '../validators/cart'
+import { prisma } from '../lib/prisma.js'
+import { AppError } from '../types/index.js'
+import type { AddToCartInput, UpdateCartItemInput } from '../validators/cart.js'
 
 /**
  * 書籍資訊的 select 設定（只取前端需要的欄位，不回傳多餘資料）。

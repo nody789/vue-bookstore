@@ -12,7 +12,7 @@
  * 2. TypeScript 型別推導（驗證通過後，data 就有正確的型別）
  * 這樣就不需要另外寫型別斷言（as SomeType）。
  */
-import { AppError } from '../types/index'
+import { AppError } from '../types/index.js'
 
 /**
  * 驗證傳入的資料是否符合 Zod schema，驗證失敗時拋出 AppError。

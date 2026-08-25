@@ -16,14 +16,14 @@
  * /api/v1/coupons     → 折價券驗證（需登入）＋管理（需管理員）
  */
 import { Router } from 'express'
-import authRoutes from './auth'
-import usersRoutes from './users'
-import booksRoutes from './books'
-import categoriesRoutes from './categories'
-import cartRoutes from './cart'
-import ordersRoutes from './orders'
-import couponRoutes from './coupon'
-import uploadRoutes from './upload'
+import authRoutes from './auth.js'
+import usersRoutes from './users.js'
+import booksRoutes from './books.js'
+import categoriesRoutes from './categories.js'
+import cartRoutes from './cart.js'
+import ordersRoutes from './orders.js'
+import couponRoutes from './coupon.js'
+import uploadRoutes from './upload.js'
 
 const router = Router()
 

@@ -14,7 +14,7 @@
  * 2. 支援部分不支援 Rust binary 的部署環境（例如 Cloudflare Workers、edge runtime）
  * 3. ssl: { rejectUnauthorized: false } 讓開發環境在 SSL 憑證不完整時仍可連線（正式環境應設為 true）
  */
-import { PrismaClient } from '../generated/prisma/client'
+import { PrismaClient } from '../generated/prisma/client.js'
 import { PrismaPg } from '@prisma/adapter-pg'
 import pg from 'pg'
 

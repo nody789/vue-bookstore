@@ -11,9 +11,9 @@
  * Service 不處理 HTTP 相關的東西（req、res），保持純粹的商業邏輯。
  */
 import bcrypt from 'bcrypt'
-import { prisma } from '../lib/prisma'
-import { AppError } from '../types/index'
-import type { RegisterInput, LoginInput } from '../validators/auth'
+import { prisma } from '../lib/prisma.js'
+import { AppError } from '../types/index.js'
+import type { RegisterInput, LoginInput } from '../validators/auth.js'
 
 // 每次呼叫時動態取得 secret，確保讀取到最新的環境變數值
 const getSecret = () => new TextEncoder().encode(process.env['JWT_SECRET'] || 'fallback_secret')

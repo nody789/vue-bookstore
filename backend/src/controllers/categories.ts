@@ -7,10 +7,10 @@
  * 保持 controller 精簡，不包含商業邏輯。
  */
 import type { Request, Response } from 'express'
-import * as categoriesService from '../services/categories'
-import { createCategorySchema, updateCategorySchema } from '../validators/order'
-import { sendSuccess } from '../utils/response'
-import { parseZod } from '../utils/validate'
+import * as categoriesService from '../services/categories.js'
+import { createCategorySchema, updateCategorySchema } from '../validators/order.js'
+import { sendSuccess } from '../utils/response.js'
+import { parseZod } from '../utils/validate.js'
 
 /**
  * 取得所有書籍分類。

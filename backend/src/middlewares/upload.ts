@@ -12,7 +12,7 @@
  * memoryStorage 直接存在 buffer 中，傳完就釋放，不留任何檔案。
  */
 import multer from 'multer'
-import { AppError } from '../types/index'
+import { AppError } from '../types/index.js'
 
 export const upload = multer({
   storage: multer.memoryStorage(),

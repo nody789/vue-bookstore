@@ -20,7 +20,7 @@
  */
 import { Router } from 'express'
 import rateLimit from 'express-rate-limit'
-import * as authController from '../controllers/auth'
+import * as authController from '../controllers/auth.js'
 
 const router = Router()
 

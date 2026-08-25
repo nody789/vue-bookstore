@@ -12,10 +12,10 @@
  * 所有驗證邏輯在 parseZod 裡，所有商業邏輯在 service 裡。
  */
 import type { Request, Response } from 'express'
-import * as authService from '../services/auth'
-import { registerSchema, loginSchema } from '../validators/auth'
-import { sendSuccess } from '../utils/response'
-import { parseZod } from '../utils/validate'
+import * as authService from '../services/auth.js'
+import { registerSchema, loginSchema } from '../validators/auth.js'
+import { sendSuccess } from '../utils/response.js'
+import { parseZod } from '../utils/validate.js'
 
 /**
  * 處理使用者註冊。

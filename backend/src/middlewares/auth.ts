@@ -27,7 +27,7 @@
  * 缺點是在 CommonJS 環境需用 dynamic import 載入。
  */
 import type { Response, NextFunction } from 'express'
-import { AppError, type AuthRequest } from '../types/index'
+import { AppError, type AuthRequest } from '../types/index.js'
 
 // 每次取得 secret 時才動態建立，確保都是讀取最新的環境變數值
 const getSecret = () => new TextEncoder().encode(process.env['JWT_SECRET'] || 'fallback_secret')

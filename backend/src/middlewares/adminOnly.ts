@@ -18,7 +18,7 @@
  * 先 authenticate 確認身份 → 再 adminOnly 確認角色 → 最後才進 controller
  */
 import type { Response, NextFunction } from 'express'
-import { AppError, type AuthRequest } from '../types/index'
+import { AppError, type AuthRequest } from '../types/index.js'
 
 export const adminOnly = (
   req: AuthRequest,

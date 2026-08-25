@@ -14,9 +14,9 @@
  * service 層會再確認操作的 cartItem 屬於當前使用者，防止跨使用者存取。
  */
 import { Router } from 'express'
-import * as cartController from '../controllers/cart'
-import { authenticate } from '../middlewares/auth'
-import type { AuthRequest } from '../types/index'
+import * as cartController from '../controllers/cart.js'
+import { authenticate } from '../middlewares/auth.js'
+import type { AuthRequest } from '../types/index.js'
 import type { Response, NextFunction } from 'express'
 
 const router = Router()

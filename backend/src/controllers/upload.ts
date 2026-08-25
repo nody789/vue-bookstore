@@ -18,8 +18,8 @@
  */
 import type { Request, Response } from 'express'
 import { v2 as cloudinary } from 'cloudinary'
-import { sendSuccess } from '../utils/response'
-import { AppError } from '../types/index'
+import { sendSuccess } from '../utils/response.js'
+import { AppError } from '../types/index.js'
 
 // 在模組載入時設定一次，之後每次呼叫都使用這份設定
 cloudinary.config({

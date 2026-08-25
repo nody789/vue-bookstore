@@ -7,8 +7,8 @@
  * 目前功能較單純：查詢和更新自己的資料。
  * 未來若有更換密碼、停用帳號等功能，也會加在這裡。
  */
-import { prisma } from '../lib/prisma'
-import { AppError } from '../types/index'
+import { prisma } from '../lib/prisma.js'
+import { AppError } from '../types/index.js'
 
 /**
  * 取得當前使用者的個人資料。

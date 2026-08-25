@@ -12,11 +12,11 @@
  * 所以 controller 的型別需要換成 AuthRequest 才能存取 req.user。
  */
 import type { Response } from 'express'
-import * as cartService from '../services/cart'
-import { addToCartSchema, updateCartItemSchema } from '../validators/cart'
-import { type AuthRequest } from '../types/index'
-import { sendSuccess } from '../utils/response'
-import { parseZod } from '../utils/validate'
+import * as cartService from '../services/cart.js'
+import { addToCartSchema, updateCartItemSchema } from '../validators/cart.js'
+import { type AuthRequest } from '../types/index.js'
+import { sendSuccess } from '../utils/response.js'
+import { parseZod } from '../utils/validate.js'
 
 /**
  * 取得當前使用者的購物車內容。

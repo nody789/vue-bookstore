@@ -8,9 +8,9 @@
  * - 計算折扣金額（支援百分比和固定金額兩種類型）
  * - 折價券 CRUD 管理
  */
-import { prisma } from '../lib/prisma'
-import { AppError } from '../types/index'
-import type { CreateCouponInput, ValidateCouponInput, UpdateCouponInput } from '../validators/coupon'
+import { prisma } from '../lib/prisma.js'
+import { AppError } from '../types/index.js'
+import type { CreateCouponInput, ValidateCouponInput, UpdateCouponInput } from '../validators/coupon.js'
 
 /**
  * 取得所有折價券（管理員用），依建立時間降序排列。

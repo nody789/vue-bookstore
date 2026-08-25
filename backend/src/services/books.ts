@@ -10,10 +10,10 @@
  *
  * 所有資料庫操作透過 prisma，不直接寫 SQL。
  */
-import { prisma } from '../lib/prisma'
-import { AppError } from '../types/index'
-import { getPaginationParams } from '../utils/response'
-import type { CreateBookInput, UpdateBookInput } from '../validators/book'
+import { prisma } from '../lib/prisma.js'
+import { AppError } from '../types/index.js'
+import { getPaginationParams } from '../utils/response.js'
+import type { CreateBookInput, UpdateBookInput } from '../validators/book.js'
 
 /**
  * 書籍查詢參數的型別定義（從 query string 解析後的結構）。
