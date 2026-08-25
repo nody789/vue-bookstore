@@ -72,6 +72,10 @@ const handleLogout = () => {
               <!-- 下拉選單 -->
               <div v-if="userMenuOpen"
                 class="absolute right-0 mt-2 w-44 bg-white border border-gray-200 rounded-xl shadow-lg py-1 text-sm overflow-hidden">
+                <RouterLink to="/profile" @click="userMenuOpen = false"
+                  class="flex items-center gap-2 px-4 py-2.5 text-stone-700 hover:bg-amber-50 transition">
+                  <span>👤</span> 個人資料
+                </RouterLink>
                 <RouterLink to="/orders" @click="userMenuOpen = false"
                   class="flex items-center gap-2 px-4 py-2.5 text-stone-700 hover:bg-amber-50 transition">
                   <span>📦</span> 我的訂單

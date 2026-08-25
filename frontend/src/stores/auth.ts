@@ -35,6 +35,13 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.setItem('token', t)
   }
 
+  // 更新本地的 user 資料（例如修改姓名後同步 Navbar 顯示）
+  const updateUser = (updated: Partial<User>) => {
+    if (!user.value) return
+    user.value = { ...user.value, ...updated }
+    localStorage.setItem('user', JSON.stringify(user.value))
+  }
+
   // 清除 store 和 localStorage，App.vue 的 watch 會同步清空購物車
   const logout = () => {
     user.value = null
@@ -43,5 +50,5 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('token')
   }
 
-  return { user, token, isLoggedIn, isAdmin, login, register, logout }
+  return { user, token, isLoggedIn, isAdmin, login, register, logout, updateUser }
 })
