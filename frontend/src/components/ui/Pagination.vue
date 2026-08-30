@@ -17,16 +17,18 @@ const pages = () => {
 <template>
   <div v-if="meta.totalPages > 1" class="flex items-center justify-center gap-2 mt-8">
     <button :disabled="meta.page === 1" @click="emit('change', meta.page - 1)"
-      class="px-3 py-2 text-sm rounded border border-gray-300 disabled:opacity-40 hover:bg-gray-50 transition">
+      class="px-3 py-2 text-sm rounded border border-gray-300 dark:border-gray-600 text-stone-600 dark:text-gray-300 disabled:opacity-40 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
       ←
     </button>
     <button v-for="p in pages()" :key="p" @click="emit('change', p)"
       :class="['px-3 py-2 text-sm rounded border transition',
-        p === meta.page ? 'bg-amber-700 text-white border-amber-700' : 'border-gray-300 hover:bg-gray-50']">
+        p === meta.page
+          ? 'bg-amber-700 text-white border-amber-700'
+          : 'border-gray-300 dark:border-gray-600 text-stone-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700']">
       {{ p }}
     </button>
     <button :disabled="meta.page === meta.totalPages" @click="emit('change', meta.page + 1)"
-      class="px-3 py-2 text-sm rounded border border-gray-300 disabled:opacity-40 hover:bg-gray-50 transition">
+      class="px-3 py-2 text-sm rounded border border-gray-300 dark:border-gray-600 text-stone-600 dark:text-gray-300 disabled:opacity-40 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
       →
     </button>
   </div>

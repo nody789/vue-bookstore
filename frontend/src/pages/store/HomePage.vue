@@ -4,11 +4,13 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '@/lib/api'
+import { useRecentlyViewedStore } from '@/stores/recentlyViewed'
 import BookCard from '@/components/ui/BookCard.vue'
 import Pagination from '@/components/ui/Pagination.vue'
 import type { Book, Category, PaginationMeta } from '@/types'
 
 const route = useRoute()
+const recentlyViewed = useRecentlyViewedStore()
 
 const books = ref<Book[]>([])
 const categories = ref<Category[]>([])
@@ -148,38 +150,46 @@ onMounted(() => {
       </div>
     </div>
 
+    <!-- ─── 最近瀏覽 ──────────────────────────────────────────────── -->
+    <div v-if="recentlyViewed.items.length > 0" class="mb-10">
+      <h2 class="font-semibold text-stone-700 dark:text-gray-200 text-lg mb-4">最近瀏覽</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+        <BookCard v-for="book in recentlyViewed.items" :key="book.id" :book="book" />
+      </div>
+    </div>
+
     <!-- ─── 分類 + 搜尋 ──────────────────────────────────────────── -->
     <div id="book-list" class="flex flex-wrap items-center gap-2 mb-6">
       <button @click="onCategoryChange('')"
         :class="['px-4 py-1.5 rounded-full text-sm border font-medium transition',
           !filters.categoryId
             ? 'bg-amber-700 text-white border-amber-700 shadow-sm'
-            : 'border-gray-300 text-stone-500 hover:border-amber-600 hover:text-amber-700']">
+            : 'border-gray-300 dark:border-gray-600 text-stone-500 dark:text-gray-400 hover:border-amber-600 hover:text-amber-700 dark:hover:border-amber-500 dark:hover:text-amber-400']">
         全部
       </button>
       <button v-for="cat in categories" :key="cat.id" @click="onCategoryChange(cat.id)"
         :class="['px-4 py-1.5 rounded-full text-sm border font-medium transition',
           filters.categoryId === cat.id
             ? 'bg-amber-700 text-white border-amber-700 shadow-sm'
-            : 'border-gray-300 text-stone-500 hover:border-amber-600 hover:text-amber-700']">
+            : 'border-gray-300 dark:border-gray-600 text-stone-500 dark:text-gray-400 hover:border-amber-600 hover:text-amber-700 dark:hover:border-amber-500 dark:hover:text-amber-400']">
         {{ cat.name }}
       </button>
 
       <!-- 搜尋框推到右側 -->
       <div class="ml-auto">
         <div class="relative">
-          <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
           </svg>
           <input type="text" placeholder="搜尋書名、作者..." @input="onKeywordInput"
             :value="filters.keyword"
-            class="border border-gray-300 rounded-full pl-9 pr-4 py-1.5 text-sm w-52 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white" />
+            class="border border-gray-300 dark:border-gray-600 rounded-full pl-9 pr-4 py-1.5 text-sm w-52 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white dark:bg-gray-800 text-stone-800 dark:text-gray-100 placeholder:text-stone-400 dark:placeholder:text-gray-500" />
         </div>
       </div>
     </div>
 
     <!-- 書籍數量提示 -->
-    <div v-if="!loading && meta" class="text-xs text-stone-400 mb-4">
+    <div v-if="!loading && meta" class="text-xs text-stone-400 dark:text-gray-500 mb-4">
       共 {{ meta.total }} 本書籍
       <span v-if="filters.keyword">｜搜尋「{{ filters.keyword }}」</span>
       <span v-if="filters.categoryId && categories.find(c => c.id === filters.categoryId)">
@@ -190,14 +200,14 @@ onMounted(() => {
     <!-- ─── 書籍格線 ──────────────────────────────────────────────── -->
     <div v-if="loading" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
       <div v-for="i in 10" :key="i" class="animate-pulse">
-        <div class="aspect-[3/4] bg-gray-200 rounded-xl mb-2"></div>
-        <div class="h-3 bg-gray-200 rounded mb-1.5 w-3/4"></div>
-        <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+        <div class="aspect-[3/4] bg-gray-200 dark:bg-gray-700 rounded-xl mb-2"></div>
+        <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded mb-1.5 w-3/4"></div>
+        <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
       </div>
     </div>
 
     <div v-else-if="books.length === 0"
-      class="text-center py-24 text-stone-400">
+      class="text-center py-24 text-stone-400 dark:text-gray-500">
       <p class="text-4xl mb-4">📭</p>
       <p class="text-lg font-medium mb-1">找不到相關書籍</p>
       <p class="text-sm">試試其他關鍵字或分類</p>

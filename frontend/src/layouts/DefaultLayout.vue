@@ -4,10 +4,12 @@
 import { RouterView, RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
+import { useThemeStore } from '@/stores/theme'
 import { ref } from 'vue'
 
 const auth = useAuthStore()
 const cart = useCartStore()
+const theme = useThemeStore()
 const router = useRouter()
 
 // userMenuOpen：使用者頭像下拉選單的展開狀態，只有 Layout 用到
@@ -21,18 +23,18 @@ const handleLogout = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 flex flex-col">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col transition-colors duration-200">
 
     <!-- 公告列 -->
-    <div class="bg-amber-800 text-amber-50 text-center text-xs py-2 px-4">
+    <div class="bg-amber-800 dark:bg-amber-900 text-amber-50 text-center text-xs py-2 px-4">
       🎉 精選書單上架中 &nbsp;·&nbsp; 滿 599 元免運費 &nbsp;·&nbsp; 全站書籍特價優惠中
     </div>
 
     <!-- Navbar -->
-    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <nav class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
         <!-- Logo -->
-        <RouterLink to="/" class="font-bold text-xl text-amber-800 shrink-0 flex items-center gap-2">
+        <RouterLink to="/" class="font-bold text-xl text-amber-800 dark:text-amber-500 shrink-0 flex items-center gap-2">
           <span class="text-2xl">📚</span> Vue Bookstore
         </RouterLink>
 
@@ -46,14 +48,30 @@ const handleLogout = () => {
               if (q) router.push({ path: '/', query: { keyword: q } })
               else router.push('/')
             }"
-            class="w-full border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-gray-50"
+            class="w-full border border-gray-300 dark:border-gray-600 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-gray-50 dark:bg-gray-800 text-stone-800 dark:text-gray-100 placeholder:text-stone-400 dark:placeholder:text-gray-500"
           />
         </div>
 
         <!-- 右側操作區 -->
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2">
+          <!-- Dark Mode 切換 -->
+          <button @click="theme.toggle()"
+            class="p-2 text-stone-500 dark:text-gray-400 hover:text-amber-700 dark:hover:text-amber-400 transition rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+            :title="theme.isDark ? '切換淺色模式' : '切換深色模式'">
+            <!-- 淺色時顯示月亮（點擊切換深色） -->
+            <svg v-if="!theme.isDark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+            <!-- 深色時顯示太陽（點擊切換淺色） -->
+            <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M18.364 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+            </svg>
+          </button>
+
           <!-- 購物車 -->
-          <RouterLink to="/cart" class="relative p-2 text-stone-500 hover:text-amber-700 transition">
+          <RouterLink to="/cart" class="relative p-2 text-stone-500 dark:text-gray-400 hover:text-amber-700 dark:hover:text-amber-400 transition">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -68,30 +86,30 @@ const handleLogout = () => {
           <template v-if="auth.isLoggedIn">
             <div class="relative">
               <button @click="userMenuOpen = !userMenuOpen"
-                class="flex items-center gap-2 text-sm text-stone-700 hover:text-amber-700 transition">
+                class="flex items-center gap-2 text-sm text-stone-700 dark:text-gray-200 hover:text-amber-700 dark:hover:text-amber-400 transition">
                 <span class="hidden sm:block font-medium">{{ auth.user?.name }}</span>
-                <div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-800 font-bold text-sm">
+                <div class="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-900 flex items-center justify-center text-amber-800 dark:text-amber-300 font-bold text-sm">
                   {{ auth.user?.name?.charAt(0) }}
                 </div>
               </button>
               <!-- 下拉選單 -->
               <div v-if="userMenuOpen"
-                class="absolute right-0 mt-2 w-44 bg-white border border-gray-200 rounded-xl shadow-lg py-1 text-sm overflow-hidden">
+                class="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg py-1 text-sm overflow-hidden">
                 <RouterLink to="/profile" @click="userMenuOpen = false"
-                  class="flex items-center gap-2 px-4 py-2.5 text-stone-700 hover:bg-amber-50 transition">
+                  class="flex items-center gap-2 px-4 py-2.5 text-stone-700 dark:text-gray-200 hover:bg-amber-50 dark:hover:bg-amber-900/30 transition">
                   <span>👤</span> 個人資料
                 </RouterLink>
                 <RouterLink to="/orders" @click="userMenuOpen = false"
-                  class="flex items-center gap-2 px-4 py-2.5 text-stone-700 hover:bg-amber-50 transition">
+                  class="flex items-center gap-2 px-4 py-2.5 text-stone-700 dark:text-gray-200 hover:bg-amber-50 dark:hover:bg-amber-900/30 transition">
                   <span>📦</span> 我的訂單
                 </RouterLink>
                 <RouterLink v-if="auth.isAdmin" to="/admin" @click="userMenuOpen = false"
-                  class="flex items-center gap-2 px-4 py-2.5 text-stone-700 hover:bg-amber-50 transition">
+                  class="flex items-center gap-2 px-4 py-2.5 text-stone-700 dark:text-gray-200 hover:bg-amber-50 dark:hover:bg-amber-900/30 transition">
                   <span>⚙️</span> 後台管理
                 </RouterLink>
-                <div class="border-t border-gray-100 my-1"></div>
+                <div class="border-t border-gray-100 dark:border-gray-700 my-1"></div>
                 <button @click="handleLogout"
-                  class="w-full flex items-center gap-2 px-4 py-2.5 text-red-600 hover:bg-red-50 transition">
+                  class="w-full flex items-center gap-2 px-4 py-2.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition">
                   <span>🚪</span> 登出
                 </button>
               </div>
@@ -113,7 +131,7 @@ const handleLogout = () => {
     </main>
 
     <!-- Footer -->
-    <footer class="bg-stone-900 text-stone-400 mt-auto">
+    <footer class="bg-stone-900 dark:bg-gray-950 text-stone-400 mt-auto">
       <div class="max-w-7xl mx-auto px-4 py-12">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
 
@@ -172,7 +190,7 @@ const handleLogout = () => {
         </div>
 
         <!-- 底部分隔 + 版權 -->
-        <div class="border-t border-stone-700 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-stone-600">
+        <div class="border-t border-stone-700 dark:border-gray-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-stone-600">
           <p>© 2026 Vue Bookstore. All Rights Reserved.</p>
           <div class="flex gap-4">
             <a href="#" class="hover:text-stone-400 transition">隱私政策</a>

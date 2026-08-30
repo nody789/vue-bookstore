@@ -4,11 +4,16 @@
 import { RouterView } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
+import { useThemeStore } from '@/stores/theme'
 import { watch } from 'vue'
 import ToastContainer from '@/components/ui/ToastContainer.vue'
 
 const auth = useAuthStore()
 const cart = useCartStore()
+const theme = useThemeStore()
+
+// 啟動時立即同步 <html> class，避免重整頁面閃白
+theme.init()
 
 // 監聽登入狀態：登入後同步購物車，登出後清空記憶體
 // immediate: true 確保重整頁面時（localStorage 有 token）立即執行一次

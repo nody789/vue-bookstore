@@ -77,48 +77,48 @@ const formatDate = (iso: string) =>
 
 <template>
   <div class="max-w-2xl mx-auto py-8">
-    <h1 class="text-2xl font-bold text-stone-800 mb-8">個人資料</h1>
+    <h1 class="text-2xl font-bold text-stone-800 dark:text-gray-100 mb-8">個人資料</h1>
 
-    <div v-if="loading" class="text-center py-20 text-stone-400">載入中...</div>
+    <div v-if="loading" class="text-center py-20 text-stone-400 dark:text-gray-500">載入中...</div>
 
     <div v-else class="space-y-6">
       <!-- 頭像 + 基本資訊卡片 -->
-      <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 flex items-center gap-6">
-        <div class="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center text-amber-800 font-bold text-2xl shrink-0">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-6 flex items-center gap-6">
+        <div class="w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-900 flex items-center justify-center text-amber-800 dark:text-amber-300 font-bold text-2xl shrink-0">
           {{ profile.name?.charAt(0) }}
         </div>
         <div>
-          <p class="text-lg font-semibold text-stone-800">{{ profile.name }}</p>
-          <p class="text-sm text-stone-500 mt-0.5">{{ profile.email }}</p>
-          <span class="inline-block mt-2 text-xs bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-full font-medium">
+          <p class="text-lg font-semibold text-stone-800 dark:text-gray-100">{{ profile.name }}</p>
+          <p class="text-sm text-stone-500 dark:text-gray-400 mt-0.5">{{ profile.email }}</p>
+          <span class="inline-block mt-2 text-xs bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-700 px-2 py-0.5 rounded-full font-medium">
             {{ roleLabel[profile.role] ?? profile.role }}
           </span>
         </div>
       </div>
 
       <!-- 詳細資料卡 -->
-      <div class="bg-white rounded-2xl border border-gray-200 shadow-sm">
-        <div class="px-6 py-4 border-b border-gray-100">
-          <h2 class="font-semibold text-stone-700">帳號資訊</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
+        <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+          <h2 class="font-semibold text-stone-700 dark:text-gray-200">帳號資訊</h2>
         </div>
 
-        <div class="divide-y divide-gray-100">
+        <div class="divide-y divide-gray-100 dark:divide-gray-700">
           <!-- 姓名 -->
           <div class="px-6 py-5 flex items-start justify-between gap-4">
             <div class="flex-1">
-              <p class="text-xs text-stone-400 mb-1">姓名</p>
-              <div v-if="!isEditing" class="text-sm font-medium text-stone-800">{{ profile.name }}</div>
+              <p class="text-xs text-stone-400 dark:text-gray-500 mb-1">姓名</p>
+              <div v-if="!isEditing" class="text-sm font-medium text-stone-800 dark:text-gray-100">{{ profile.name }}</div>
               <input v-else
                 v-model="name"
                 type="text"
                 maxlength="50"
-                class="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white dark:bg-gray-700 text-stone-800 dark:text-gray-100"
               />
             </div>
             <div class="shrink-0 flex gap-2 pt-5">
               <template v-if="!isEditing">
                 <button @click="startEdit"
-                  class="text-sm text-amber-600 hover:text-amber-700 font-medium transition">
+                  class="text-sm text-amber-600 dark:text-amber-500 hover:text-amber-700 font-medium transition">
                   編輯
                 </button>
               </template>
@@ -128,7 +128,7 @@ const formatDate = (iso: string) =>
                   {{ saving ? '儲存中...' : '儲存' }}
                 </button>
                 <button @click="cancelEdit" :disabled="saving"
-                  class="text-sm text-stone-500 hover:text-stone-700 transition">
+                  class="text-sm text-stone-500 dark:text-gray-400 hover:text-stone-700 dark:hover:text-gray-200 transition">
                   取消
                 </button>
               </template>
@@ -137,46 +137,46 @@ const formatDate = (iso: string) =>
 
           <!-- Email（唯讀） -->
           <div class="px-6 py-5">
-            <p class="text-xs text-stone-400 mb-1">Email</p>
-            <p class="text-sm text-stone-600">{{ profile.email }}</p>
-            <p class="text-xs text-stone-400 mt-1">Email 目前不支援修改</p>
+            <p class="text-xs text-stone-400 dark:text-gray-500 mb-1">Email</p>
+            <p class="text-sm text-stone-600 dark:text-gray-300">{{ profile.email }}</p>
+            <p class="text-xs text-stone-400 dark:text-gray-500 mt-1">Email 目前不支援修改</p>
           </div>
 
           <!-- 帳號身份 -->
           <div class="px-6 py-5">
-            <p class="text-xs text-stone-400 mb-1">帳號身份</p>
-            <p class="text-sm text-stone-600">{{ roleLabel[profile.role] ?? profile.role }}</p>
+            <p class="text-xs text-stone-400 dark:text-gray-500 mb-1">帳號身份</p>
+            <p class="text-sm text-stone-600 dark:text-gray-300">{{ roleLabel[profile.role] ?? profile.role }}</p>
           </div>
 
           <!-- 加入日期 -->
           <div class="px-6 py-5">
-            <p class="text-xs text-stone-400 mb-1">加入日期</p>
-            <p class="text-sm text-stone-600">{{ formatDate(profile.createdAt) }}</p>
+            <p class="text-xs text-stone-400 dark:text-gray-500 mb-1">加入日期</p>
+            <p class="text-sm text-stone-600 dark:text-gray-300">{{ formatDate(profile.createdAt) }}</p>
           </div>
         </div>
       </div>
 
       <!-- 快速連結 -->
-      <div class="bg-white rounded-2xl border border-gray-200 shadow-sm">
-        <div class="px-6 py-4 border-b border-gray-100">
-          <h2 class="font-semibold text-stone-700">快速連結</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
+        <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+          <h2 class="font-semibold text-stone-700 dark:text-gray-200">快速連結</h2>
         </div>
-        <div class="divide-y divide-gray-100">
+        <div class="divide-y divide-gray-100 dark:divide-gray-700">
           <RouterLink to="/orders"
-            class="flex items-center justify-between px-6 py-4 text-sm text-stone-700 hover:bg-amber-50 transition group">
+            class="flex items-center justify-between px-6 py-4 text-sm text-stone-700 dark:text-gray-200 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition group">
             <span class="flex items-center gap-3">
-              <span class="text-stone-400 group-hover:text-amber-600">📦</span>
+              <span class="text-stone-400 dark:text-gray-500 group-hover:text-amber-600 dark:group-hover:text-amber-500">📦</span>
               我的訂單
             </span>
-            <span class="text-stone-300 group-hover:text-amber-500">›</span>
+            <span class="text-stone-300 dark:text-gray-600 group-hover:text-amber-500">›</span>
           </RouterLink>
           <RouterLink v-if="auth.isAdmin" to="/admin"
-            class="flex items-center justify-between px-6 py-4 text-sm text-stone-700 hover:bg-amber-50 transition group">
+            class="flex items-center justify-between px-6 py-4 text-sm text-stone-700 dark:text-gray-200 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition group">
             <span class="flex items-center gap-3">
-              <span class="text-stone-400 group-hover:text-amber-600">⚙️</span>
+              <span class="text-stone-400 dark:text-gray-500 group-hover:text-amber-600 dark:group-hover:text-amber-500">⚙️</span>
               後台管理
             </span>
-            <span class="text-stone-300 group-hover:text-amber-500">›</span>
+            <span class="text-stone-300 dark:text-gray-600 group-hover:text-amber-500">›</span>
           </RouterLink>
         </div>
       </div>

@@ -30,7 +30,7 @@ const showCoverImage = computed(() => !!props.book.coverImageUrl && !imgError.va
 
 <template>
   <RouterLink :to="`/books/${book.id}`"
-    class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden group flex flex-col">
+    class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-lg dark:hover:shadow-gray-900/50 transition-all duration-200 overflow-hidden group flex flex-col">
 
     <!-- 封面（3:4 比例） -->
     <div class="aspect-[3/4] overflow-hidden relative shrink-0">
@@ -77,12 +77,12 @@ const showCoverImage = computed(() => !!props.book.coverImageUrl && !imgError.va
 
     <!-- 書籍資訊 -->
     <div class="p-3 flex flex-col gap-1 flex-1">
-      <p class="font-semibold text-stone-800 text-sm line-clamp-2 leading-snug">{{ book.title }}</p>
-      <p class="text-stone-400 text-xs">{{ book.author }}</p>
+      <p class="font-semibold text-stone-800 dark:text-gray-100 text-sm line-clamp-2 leading-snug">{{ book.title }}</p>
+      <p class="text-stone-400 dark:text-gray-500 text-xs">{{ book.author }}</p>
       <div class="flex items-center justify-between mt-auto pt-2">
-        <span class="font-bold text-amber-700 text-sm">NT$ {{ book.price.toLocaleString() }}</span>
-        <span v-if="book.stock === 0" class="text-xs text-red-400 bg-red-50 px-2 py-0.5 rounded-full">已售完</span>
-        <span v-else-if="book.stock <= 10" class="text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">僅剩 {{ book.stock }} 本</span>
+        <span class="font-bold text-amber-700 dark:text-amber-500 text-sm">NT$ {{ book.price.toLocaleString() }}</span>
+        <span v-if="book.stock === 0" class="text-xs text-red-400 bg-red-50 dark:bg-red-900/20 px-2 py-0.5 rounded-full">已售完</span>
+        <span v-else-if="book.stock <= 10" class="text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded-full">僅剩 {{ book.stock }} 本</span>
       </div>
     </div>
   </RouterLink>

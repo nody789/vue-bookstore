@@ -1,1 +1,4 @@
 @import "tailwindcss";
+
+/* class-based dark mode：<html class="dark"> 時啟動所有 dark: variant */
+@variant dark (&:where(.dark, .dark *));
