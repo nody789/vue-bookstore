@@ -128,7 +128,7 @@ onMounted(fetchBooks)
         </tbody>
       </table>
 
-      <Pagination v-if="meta" :meta="meta" @change="(p) => { page.value = p; fetchBooks() }" />
+      <Pagination v-if="meta" :meta="meta" @change="(p) => { page = p; fetchBooks() }" />
     </div>
   </div>
 </template>

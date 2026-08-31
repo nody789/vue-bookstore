@@ -125,7 +125,7 @@ onMounted(fetchOrders)
         </tbody>
       </table>
 
-      <Pagination v-if="meta" :meta="meta" @change="(p) => { page.value = p; fetchOrders() }" />
+      <Pagination v-if="meta" :meta="meta" @change="(p) => { page = p; fetchOrders() }" />
     </div>
   </div>
 </template>
