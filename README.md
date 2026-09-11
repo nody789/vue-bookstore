@@ -2,7 +2,7 @@
 
 前後台分離的線上書店，前端 Vue3 + Pinia + TypeScript，後端 Node.js + Express + Prisma，包含完整購物流程與管理後台。
 
-**Demo：** [部署連結（Render）]([https://vue-bookstore.onrender.com](https://vue-bookstore-rpzj.onrender.com))
+**Demo：** https://vue-bookstore-rpzj.onrender.com
 
 ---
 
