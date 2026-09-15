@@ -5,6 +5,7 @@
 // 書籍載入成功後記錄到 recentlyViewed store（純前端，不需後端）
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useHead } from '@unhead/vue'
 import api from '@/lib/api'
 import { useAuthStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
@@ -23,6 +24,31 @@ const toast = useToast()
 const book = ref<Book | null>(null)
 const loading = ref(true)
 const relatedBooks = ref<Book[]>([])
+
+// useHead 傳入 getter function（() => ({...})），讓 book.value 更新時自動同步 <head>
+// 這是最重要的 SEO：讓每本書的詳情頁有獨立的 title 和 og:image（社群分享縮圖）
+useHead(() => ({
+  title: book.value ? `${book.value.title} — Vue Bookstore` : 'Vue Bookstore',
+  meta: [
+    {
+      name: 'description',
+      content: book.value
+        ? `${book.value.title}，作者：${book.value.author}。${book.value.description ?? ''}`
+        : 'Vue Bookstore — 探索各類好書',
+    },
+    // og:title / og:description / og:image 讓 Facebook、LINE 分享時顯示書封縮圖
+    { property: 'og:title', content: book.value ? book.value.title : 'Vue Bookstore' },
+    {
+      property: 'og:description',
+      content: book.value?.description ?? 'Vue Bookstore — 探索各類好書',
+    },
+    {
+      property: 'og:image',
+      content: book.value?.coverImageUrl ?? '',
+    },
+    { property: 'og:type', content: 'product' },
+  ],
+}))
 // quantity：購買數量，模板用 Math.max/min 限制在 1 到庫存之間
 const quantity = ref(1)
 // adding：加入中時按鈕 disabled，避免重複點擊

@@ -15,12 +15,18 @@ const pages = () => {
 </script>
 
 <template>
-  <div v-if="meta.totalPages > 1" class="flex items-center justify-center gap-2 mt-8">
+  <!-- nav + aria-label 讓螢幕閱讀器知道這是分頁導航，而不是普通列表 -->
+  <nav v-if="meta.totalPages > 1" aria-label="分頁導航" class="flex items-center justify-center gap-2 mt-8">
+    <!-- aria-label 補充按鈕意義（視覺只有箭頭符號，螢幕閱讀器需要文字說明） -->
     <button :disabled="meta.page === 1" @click="emit('change', meta.page - 1)"
+      aria-label="上一頁"
       class="px-3 py-2 text-sm rounded border border-gray-300 dark:border-gray-600 text-stone-600 dark:text-gray-300 disabled:opacity-40 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
       ←
     </button>
+    <!-- aria-current="page" 告知螢幕閱讀器目前所在頁碼 -->
     <button v-for="p in pages()" :key="p" @click="emit('change', p)"
+      :aria-label="`第 ${p} 頁`"
+      :aria-current="p === meta.page ? 'page' : undefined"
       :class="['px-3 py-2 text-sm rounded border transition',
         p === meta.page
           ? 'bg-amber-700 text-white border-amber-700'
@@ -28,8 +34,9 @@ const pages = () => {
       {{ p }}
     </button>
     <button :disabled="meta.page === meta.totalPages" @click="emit('change', meta.page + 1)"
+      aria-label="下一頁"
       class="px-3 py-2 text-sm rounded border border-gray-300 dark:border-gray-600 text-stone-600 dark:text-gray-300 disabled:opacity-40 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
       →
     </button>
-  </div>
+  </nav>
 </template>

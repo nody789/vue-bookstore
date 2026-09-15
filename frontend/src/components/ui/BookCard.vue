@@ -36,10 +36,12 @@ const showCoverImage = computed(() => !!props.book.coverImageUrl && !imgError.va
     <div class="aspect-[3/4] overflow-hidden relative shrink-0">
 
       <!-- 有封面圖時顯示 -->
+      <!-- loading="lazy" 讓首屏以外的書封等到接近視窗才載入，減少初始頁面流量（效能 SEO） -->
       <img
         v-if="showCoverImage"
         :src="book.coverImageUrl!"
         :alt="book.title"
+        loading="lazy"
         @error="imgError = true"
         class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
       />

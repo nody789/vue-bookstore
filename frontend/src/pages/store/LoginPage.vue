@@ -3,7 +3,10 @@
 // 登入成功後讀取 route.query.redirect，跳回原本要去的頁面（無則回首頁）
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useHead } from '@unhead/vue'
 import { useAuthStore } from '@/stores/auth'
+
+useHead({ title: '登入 / 註冊 — Vue Bookstore' })
 
 const router = useRouter()
 const route = useRoute()

@@ -3,6 +3,7 @@
 // 【資料流】onMounted 同時載入分類和書籍，篩選條件變動時 watch 重新打 API
 import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { useHead } from '@unhead/vue'
 import api from '@/lib/api'
 import { useRecentlyViewedStore } from '@/stores/recentlyViewed'
 import BookCard from '@/components/ui/BookCard.vue'
@@ -11,6 +12,16 @@ import type { Book, Category, PaginationMeta } from '@/types'
 
 const route = useRoute()
 const recentlyViewed = useRecentlyViewedStore()
+
+useHead({
+  title: 'Vue Bookstore — 探索各類好書',
+  meta: [
+    { name: 'description', content: '瀏覽各類書籍、加入購物車、輕鬆完成訂購。文學、商業、科技應有盡有。' },
+    { property: 'og:title', content: 'Vue Bookstore — 探索各類好書' },
+    { property: 'og:description', content: '瀏覽各類書籍、加入購物車、輕鬆完成訂購。' },
+    { property: 'og:type', content: 'website' },
+  ],
+})
 
 const books = ref<Book[]>([])
 const categories = ref<Category[]>([])

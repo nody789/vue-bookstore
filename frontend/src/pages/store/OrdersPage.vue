@@ -2,7 +2,10 @@
 // OrdersPage — 我的訂單列表（前台），後端依 JWT 自動篩選當前使用者的訂單
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useHead } from '@unhead/vue'
 import api from '@/lib/api'
+
+useHead({ title: '我的訂單 — Vue Bookstore' })
 import StatusBadge from '@/components/ui/StatusBadge.vue'
 import Pagination from '@/components/ui/Pagination.vue'
 import type { Order, PaginationMeta } from '@/types'

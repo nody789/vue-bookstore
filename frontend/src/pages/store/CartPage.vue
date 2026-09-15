@@ -3,7 +3,10 @@
 // 不需要 onMounted 打 API，Pinia store 統一管理資料，頁面只負責顯示
 import { useCartStore } from '@/stores/cart'
 import { useRouter } from 'vue-router'
+import { useHead } from '@unhead/vue'
 import { useToast } from '@/composables/useToast'
+
+useHead({ title: '購物車 — Vue Bookstore' })
 
 const cart = useCartStore()
 const router = useRouter()
@@ -50,18 +53,22 @@ const handleRemove = async (itemId: string) => {
           <!-- 數量控制 -->
           <div class="flex items-center border border-gray-300 dark:border-gray-600 rounded overflow-hidden text-sm">
             <button @click="handleUpdate(item.id, item.quantity - 1)" :disabled="item.quantity <= 1"
+              :aria-label="`減少 ${item.book.title} 數量`"
               class="px-2 py-1 text-stone-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-40">−</button>
-            <span class="px-3 py-1 dark:text-gray-200">{{ item.quantity }}</span>
+            <span class="px-3 py-1 dark:text-gray-200" :aria-label="`數量 ${item.quantity}`">{{ item.quantity }}</span>
             <button @click="handleUpdate(item.id, item.quantity + 1)" :disabled="item.quantity >= item.book.stock"
+              :aria-label="`增加 ${item.book.title} 數量`"
               class="px-2 py-1 text-stone-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-40">+</button>
           </div>
           <!-- 小計 -->
           <p class="text-stone-700 dark:text-gray-200 font-medium w-20 text-right text-sm">
             NT$ {{ (item.book.price * item.quantity).toLocaleString() }}
           </p>
-          <!-- 刪除 -->
-          <button @click="handleRemove(item.id)" class="text-red-400 hover:text-red-600 transition ml-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <!-- 刪除：純圖示按鈕必須加 aria-label，螢幕閱讀器才知道這個按鈕的用途 -->
+          <button @click="handleRemove(item.id)"
+            :aria-label="`移除 ${item.book.title}`"
+            class="text-red-400 hover:text-red-600 transition ml-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
