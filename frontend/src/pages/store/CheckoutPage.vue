@@ -65,8 +65,24 @@ const form = ref({
   shippingAddress: '',
 })
 
-const submit = async () => {
+// 前端驗證：送出 API 前先在瀏覽器端檢查格式，不用等網路就能給使用者回饋
+// 後端仍有 Zod 驗證作為最後防線，前端驗證是 UX 優化，不能取代後端驗證
+const validate = () => {
   errors.value = {}
+  if (!form.value.recipientName.trim()) {
+    errors.value['recipientName'] = '姓名不可為空'
+  }
+  if (!/^09\d{8}$/.test(form.value.recipientPhone)) {
+    errors.value['recipientPhone'] = '電話格式不正確（09 開頭，共 10 碼）'
+  }
+  if (form.value.shippingAddress.trim().length < 10) {
+    errors.value['shippingAddress'] = '地址至少請填寫 10 個字'
+  }
+  return Object.keys(errors.value).length === 0
+}
+
+const submit = async () => {
+  if (!validate()) return   // 前端驗證不通過，直接擋住，不送 API
   submitting.value = true
   try {
     await api.post('/orders', {
@@ -157,21 +173,21 @@ const submit = async () => {
       <form @submit.prevent="submit" class="space-y-4">
         <div>
           <label class="block text-sm font-medium text-stone-700 dark:text-gray-200 mb-1">收件人姓名</label>
-          <input v-model="form.recipientName" type="text" required
+          <input v-model="form.recipientName" type="text"
             class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white dark:bg-gray-700 text-stone-800 dark:text-gray-100"
             :class="errors['recipientName'] ? 'border-red-400' : 'border-gray-300 dark:border-gray-600'" />
           <p v-if="errors['recipientName']" class="text-red-500 dark:text-red-400 text-xs mt-1">{{ errors['recipientName'] }}</p>
         </div>
         <div>
           <label class="block text-sm font-medium text-stone-700 dark:text-gray-200 mb-1">聯絡電話</label>
-          <input v-model="form.recipientPhone" type="tel" required placeholder="09xxxxxxxx"
+          <input v-model="form.recipientPhone" type="tel" placeholder="09xxxxxxxx"
             class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white dark:bg-gray-700 text-stone-800 dark:text-gray-100 placeholder:text-stone-400 dark:placeholder:text-gray-500"
             :class="errors['recipientPhone'] ? 'border-red-400' : 'border-gray-300 dark:border-gray-600'" />
           <p v-if="errors['recipientPhone']" class="text-red-500 dark:text-red-400 text-xs mt-1">{{ errors['recipientPhone'] }}</p>
         </div>
         <div>
           <label class="block text-sm font-medium text-stone-700 dark:text-gray-200 mb-1">收件地址</label>
-          <input v-model="form.shippingAddress" type="text" required
+          <input v-model="form.shippingAddress" type="text"
             class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white dark:bg-gray-700 text-stone-800 dark:text-gray-100"
             :class="errors['shippingAddress'] ? 'border-red-400' : 'border-gray-300 dark:border-gray-600'" />
           <p v-if="errors['shippingAddress']" class="text-red-500 dark:text-red-400 text-xs mt-1">{{ errors['shippingAddress'] }}</p>
