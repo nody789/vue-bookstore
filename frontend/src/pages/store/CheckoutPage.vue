@@ -7,6 +7,7 @@ import api from '@/lib/api'
 import { useCartStore } from '@/stores/cart'
 import { useToast } from '@/composables/useToast'
 import type { CouponValidateResult } from '@/types'
+import { isNotEmpty, isValidPhone, isMinLength } from '@/utils/validators'
 
 const router = useRouter()
 const cart = useCartStore()
@@ -66,16 +67,16 @@ const form = ref({
 })
 
 // 前端驗證：送出 API 前先在瀏覽器端檢查格式，不用等網路就能給使用者回饋
-// 後端仍有 Zod 驗證作為最後防線，前端驗證是 UX 優化，不能取代後端驗證
+// 規則來自 utils/validators.ts，和 LoginPage 共用同一份，後端 Zod 仍是最後防線
 const validate = () => {
   errors.value = {}
-  if (!form.value.recipientName.trim()) {
+  if (!isNotEmpty(form.value.recipientName)) {
     errors.value['recipientName'] = '姓名不可為空'
   }
-  if (!/^09\d{8}$/.test(form.value.recipientPhone)) {
+  if (!isValidPhone(form.value.recipientPhone)) {
     errors.value['recipientPhone'] = '電話格式不正確（09 開頭，共 10 碼）'
   }
-  if (form.value.shippingAddress.trim().length < 10) {
+  if (!isMinLength(form.value.shippingAddress.trim(), 10)) {
     errors.value['shippingAddress'] = '地址至少請填寫 10 個字'
   }
   return Object.keys(errors.value).length === 0

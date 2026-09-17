@@ -5,6 +5,7 @@ import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useHead } from '@unhead/vue'
 import { useAuthStore } from '@/stores/auth'
+import { isNotEmpty, isValidEmail, isMinLength } from '@/utils/validators'
 
 useHead({ title: '登入 / 註冊 — Vue Bookstore' })
 
@@ -31,30 +32,30 @@ const loginForm = ref({ email: '', password: '' })
 const registerForm = ref({ email: '', password: '', name: '' })
 
 // validate：前端驗證，按下送出前先檢查，不符合就顯示紅字，不送 API
-// 好處：不需要等網路回應，使用者立即看到錯誤；後端 Zod 仍是最後防線
+// 規則來自 utils/validators.ts，多個表單共用同一份，改規則只需改一處
 const validate = () => {
   formErrors.value = {}
   if (tab.value === 'login') {
-    if (!loginForm.value.email.trim()) {
+    if (!isNotEmpty(loginForm.value.email)) {
       formErrors.value['email'] = 'Email 不可為空'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginForm.value.email)) {
+    } else if (!isValidEmail(loginForm.value.email)) {
       formErrors.value['email'] = 'Email 格式不正確'
     }
-    if (!loginForm.value.password) {
+    if (!isNotEmpty(loginForm.value.password)) {
       formErrors.value['password'] = '密碼不可為空'
     }
   } else {
-    if (!registerForm.value.name.trim()) {
+    if (!isNotEmpty(registerForm.value.name)) {
       formErrors.value['name'] = '姓名不可為空'
     }
-    if (!registerForm.value.email.trim()) {
+    if (!isNotEmpty(registerForm.value.email)) {
       formErrors.value['email'] = 'Email 不可為空'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerForm.value.email)) {
+    } else if (!isValidEmail(registerForm.value.email)) {
       formErrors.value['email'] = 'Email 格式不正確'
     }
-    if (!registerForm.value.password) {
+    if (!isNotEmpty(registerForm.value.password)) {
       formErrors.value['password'] = '密碼不可為空'
-    } else if (registerForm.value.password.length < 8) {
+    } else if (!isMinLength(registerForm.value.password, 8)) {
       formErrors.value['password'] = '密碼至少 8 個字元'
     }
   }
